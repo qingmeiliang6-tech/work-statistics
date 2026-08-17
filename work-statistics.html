@@ -109,9 +109,9 @@
 <div class="col-span-2 flex flex-col space-y-1">
 <label class="text-sm text-slate-600">所选时间</label>
 <div class="flex items-center space-x-2">
-<input class="h-9 flex-1 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="date" value="2026-05-01"/>
+<input class="h-9 flex-1 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="datetime-local" step="1" value="2026-05-01T00:00:00"/>
 <span class="text-slate-400 text-xs">至</span>
-<input class="h-9 flex-1 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="date" value="2026-05-11"/>
+<input class="h-9 flex-1 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="datetime-local" step="1" value="2026-05-11T23:59:59"/>
 </div>
 </div>
 <div class="flex flex-col space-y-1">
@@ -168,9 +168,9 @@
 <th class="px-4 py-3 font-medium">自编号</th>
 <th class="px-4 py-3 font-medium">VIN</th>
 <th class="px-4 py-3 font-medium">车辆大类</th>
-<th class="px-4 py-3 font-medium">在线时长</th>
-<th class="px-4 py-3 font-medium">工作时长</th>
-<th class="px-4 py-3 font-medium">行驶时长</th>
+<th class="px-4 py-3 font-medium">在线时长（h）</th>
+<th class="px-4 py-3 font-medium">工作时长（h）</th>
+<th class="px-4 py-3 font-medium">行驶时长（h）</th>
 <th class="px-4 py-3 font-medium">有效作业率</th>
 <th class="px-4 py-3 font-medium">停留明细</th>
 </tr>
@@ -182,9 +182,9 @@
 <td class="px-4 py-3">ZJ-101</td>
 <td class="px-4 py-3">LZ0BEJC37T1001240</td>
 <td class="px-4 py-3">餐厨式垃圾车</td>
-<td class="px-4 py-3">23时58分</td>
-<td class="px-4 py-3">8时32分</td>
-<td class="px-4 py-3">5时21分</td>
+<td class="px-4 py-3">23.97</td>
+<td class="px-4 py-3">8.53</td>
+<td class="px-4 py-3">5.35</td>
 <td class="px-4 py-3 text-blue-600">86.5%</td>
 <td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">查看明细</a></td>
 </tr>
@@ -194,9 +194,9 @@
 <td class="px-4 py-3">ZJ-102</td>
 <td class="px-4 py-3">LZ0BEJD31T1000647</td>
 <td class="px-4 py-3">餐厨式垃圾车</td>
-<td class="px-4 py-3">23时52分</td>
-<td class="px-4 py-3">7时45分</td>
-<td class="px-4 py-3">4时58分</td>
+<td class="px-4 py-3">23.87</td>
+<td class="px-4 py-3">7.75</td>
+<td class="px-4 py-3">4.97</td>
 <td class="px-4 py-3 text-blue-600">80.2%</td>
 <td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">查看明细</a></td>
 </tr>
@@ -206,9 +206,9 @@
 <td class="px-4 py-3">SC-205</td>
 <td class="px-4 py-3">LZ0BEPD51T1006548</td>
 <td class="px-4 py-3">洗扫车</td>
-<td class="px-4 py-3">23时45分</td>
-<td class="px-4 py-3">9时10分</td>
-<td class="px-4 py-3">6时33分</td>
+<td class="px-4 py-3">23.75</td>
+<td class="px-4 py-3">9.17</td>
+<td class="px-4 py-3">6.55</td>
 <td class="px-4 py-3 text-blue-600">91.3%</td>
 <td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">查看明细</a></td>
 </tr>
@@ -218,9 +218,9 @@
 <td class="px-4 py-3">SC-206</td>
 <td class="px-4 py-3">LZ0BEPD4XT1006541</td>
 <td class="px-4 py-3">洗扫车</td>
-<td class="px-4 py-3">23时40分</td>
-<td class="px-4 py-3">8时05分</td>
-<td class="px-4 py-3">5时44分</td>
+<td class="px-4 py-3">23.67</td>
+<td class="px-4 py-3">8.08</td>
+<td class="px-4 py-3">5.73</td>
 <td class="px-4 py-3 text-blue-600">84.7%</td>
 <td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">查看明细</a></td>
 </tr>
@@ -230,9 +230,9 @@
 <td class="px-4 py-3">SC-207</td>
 <td class="px-4 py-3">LZ0BEPD52T1006549</td>
 <td class="px-4 py-3">压缩式垃圾车</td>
-<td class="px-4 py-3">23时36分</td>
-<td class="px-4 py-3">7时20分</td>
-<td class="px-4 py-3">4时36分</td>
+<td class="px-4 py-3">23.60</td>
+<td class="px-4 py-3">7.33</td>
+<td class="px-4 py-3">4.60</td>
 <td class="px-4 py-3 text-blue-600">78.9%</td>
 <td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">查看明细</a></td>
 </tr>
