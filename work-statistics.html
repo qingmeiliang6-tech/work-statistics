@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>作业统计 - 生活垃圾收运管理系统</title>
+<script src="https://modao.cc/agent-py/static/source/js/tailwindcss.js"></script>
+<script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+<style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: linear-gradient(160deg, #eef4ff 0%, #f6faff 50%, #eaf2ff 100%); }
+        .sidebar-sub-item-active { color: #3b82f6; font-weight: bold; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .stay-link { color: #2563eb; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+        .stay-link:hover { color: #1d4ed8; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden text-slate-900">
+<!-- 左侧导航 -->
+<aside class="w-64 bg-[#001529] text-slate-400 flex flex-col shrink-0">
+<div class="h-16 flex items-center px-6 space-x-3 bg-[#002140]">
+<span class="text-white text-xl font-bold tracking-wider">WUZHENG</span>
+</div>
+<nav class="flex-1 overflow-y-auto py-4 custom-scrollbar">
+<!-- 车辆监管 -->
+<div class="mb-2">
+<div class="flex items-center justify-between px-6 py-3 text-white bg-[#001529] cursor-pointer group nav-header">
+<div class="flex items-center space-x-3">
+<iconify-icon class="text-lg" icon="mdi:truck-outline"></iconify-icon>
+<span class="text-sm">车辆监管</span>
+</div>
+<iconify-icon class="text-xs transition-transform rotate-180" icon="mdi:chevron-down"></iconify-icon>
+</div>
+<div class="bg-[#000c17]">
+<a class="flex items-center h-10 pl-12 text-sm hover:text-white transition-colors" href="trajectory-playback.html">轨迹回放</a>
+<a class="flex items-center h-10 pl-12 text-sm sidebar-sub-item-active" href="work-statistics.html">作业统计</a>
+</div>
+</div>
+<!-- 信息管理 -->
+<div class="mb-2">
+<div class="flex items-center justify-between px-6 py-3 hover:text-white cursor-pointer group nav-header">
+<div class="flex items-center space-x-3">
+<iconify-icon class="text-lg" icon="mdi:database-outline"></iconify-icon>
+<span class="text-sm">信息管理</span>
+</div>
+<iconify-icon class="text-xs transition-transform" icon="mdi:chevron-down"></iconify-icon>
+</div>
+<div class="bg-[#000c17] hidden">
+<a class="flex items-center h-10 pl-12 text-sm hover:text-white transition-colors" href="vehicle-management.html">车辆管理</a>
+<a class="flex items-center h-10 pl-12 text-sm hover:text-white transition-colors" href="facility-management.html">设施管理</a>
+</div>
+</div>
+<!-- 数据统计 -->
+<div class="mb-2">
+<div class="flex items-center justify-between px-6 py-3 hover:text-white cursor-pointer group nav-header">
+<div class="flex items-center space-x-3">
+<iconify-icon class="text-lg" icon="mdi:chart-bar"></iconify-icon>
+<span class="text-sm">数据统计</span>
+</div>
+<iconify-icon class="text-xs transition-transform" icon="mdi:chevron-down"></iconify-icon>
+</div>
+<div class="hidden">
+<div class="flex items-center justify-between pl-12 py-3 text-slate-400 hover:text-white cursor-pointer group/sub sub-nav-header">
+<span class="text-sm">作业数据统计</span>
+<iconify-icon class="text-xs mr-6 transition-transform rotate-180" icon="mdi:chevron-down"></iconify-icon>
+</div>
+<div class="bg-[#000c17]">
+<a class="flex items-center h-10 pl-16 text-sm hover:text-white transition-colors" href="single-vehicle-report.html">单车作业明细</a>
+<a class="flex items-center h-10 pl-16 text-sm hover:text-white transition-colors" href="collection-point-report.html">收运点作业情况表</a>
+</div>
+</div>
+</div>
+</nav>
+</aside>
+<!-- 主内容区 -->
+<main class="flex-1 flex flex-col min-w-0">
+<header class="h-16 bg-white border-b flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center space-x-2 text-sm text-slate-500">
+<span>车辆监管</span>
+<iconify-icon icon="mdi:chevron-right"></iconify-icon>
+<span class="text-slate-900 font-medium">作业统计</span>
+</div>
+<div class="flex items-center space-x-6">
+<span class="text-xs text-slate-400">2026-05-11</span>
+<div class="flex items-center space-x-2">
+<iconify-icon class="text-2xl text-blue-600" icon="mdi:account-circle"></iconify-icon>
+<span class="text-sm font-medium leading-none">管理员</span>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors ml-4">
+<iconify-icon class="text-xl" icon="mdi:logout"></iconify-icon>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+<!-- 查询面板 -->
+<div class="bg-white rounded p-4 mb-4 border border-blue-100 shadow-sm">
+<div class="grid grid-cols-6 gap-4 mb-4">
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">所属单位</label>
+<select class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors">
+<option>请选择所属单位</option>
+<option>成都北城华沃顺通生态环境科技有限公司</option>
+<option>四川健骑士生物科技有限公司</option>
+<option>河北博鹏环境科技有限公司</option>
+</select>
+</div>
+<div class="col-span-2 flex flex-col space-y-1">
+<label class="text-sm text-slate-600">所选时间</label>
+<div class="flex items-center space-x-2">
+<input class="h-9 flex-1 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="date" value="2026-05-01"/>
+<span class="text-slate-400 text-xs">至</span>
+<input class="h-9 flex-1 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="date" value="2026-05-11"/>
+</div>
+</div>
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">自编号</label>
+<input class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" placeholder="请输入" type="text"/>
+</div>
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">车牌号/VIN</label>
+<input class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" placeholder="请输入" type="text"/>
+</div>
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">车辆大类</label>
+<select class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors">
+<option>请选择车辆大类</option>
+<option>餐厨式垃圾车</option>
+<option>洗扫车</option>
+<option>压缩式垃圾车</option>
+<option>清扫车</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-6 gap-4 mb-4">
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">车辆小类</label>
+<select class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors">
+<option>请选择车辆小类</option>
+<option>纯电动10方餐</option>
+<option>纯电动18吨洗</option>
+<option>纯电动12吨压</option>
+</select>
+</div>
+</div>
+<div class="flex items-center justify-end space-x-2">
+<button class="bg-blue-600 text-white px-8 h-9 rounded text-sm hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200">查询</button>
+<button class="bg-white border border-slate-200 text-slate-600 px-6 h-9 rounded text-sm hover:bg-slate-50 transition-colors">重置</button>
+<button class="bg-white border border-slate-200 text-slate-600 px-4 h-9 rounded text-sm flex items-center space-x-1 hover:bg-slate-50 transition-colors">
+<iconify-icon icon="mdi:file-export-outline"></iconify-icon>
+<span>批量导出</span>
+</button>
+<button class="bg-white border border-slate-200 text-slate-600 px-4 h-9 rounded text-sm flex items-center space-x-1 hover:bg-slate-50 transition-colors">
+<iconify-icon icon="mdi:clock-outline"></iconify-icon>
+<span>停留明细导出</span>
+</button>
+</div>
+</div>
+<!-- 数据列表 -->
+<div class="bg-white rounded shadow-sm border border-blue-100 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm whitespace-nowrap">
+<thead class="bg-blue-600 text-white border-b">
+<tr>
+<th class="px-4 py-3 font-medium">序号</th>
+<th class="px-4 py-3 font-medium">车牌号</th>
+<th class="px-4 py-3 font-medium">自编号</th>
+<th class="px-4 py-3 font-medium">VIN</th>
+<th class="px-4 py-3 font-medium">车辆大类</th>
+<th class="px-4 py-3 font-medium">在线时长</th>
+<th class="px-4 py-3 font-medium">作业时长</th>
+<th class="px-4 py-3 font-medium">行驶时长</th>
+<th class="px-4 py-3 font-medium">有效作业率</th>
+<th class="px-4 py-3 font-medium">停留时长</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3 text-slate-500">1</td>
+<td class="px-4 py-3">川AA9876</td>
+<td class="px-4 py-3">ZJ-101</td>
+<td class="px-4 py-3">LZ0BEJC37T1001240</td>
+<td class="px-4 py-3">餐厨式垃圾车</td>
+<td class="px-4 py-3">23时58分</td>
+<td class="px-4 py-3">8时32分</td>
+<td class="px-4 py-3">5时21分</td>
+<td class="px-4 py-3 text-blue-600">86.5%</td>
+<td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">1时23分</a></td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3 text-slate-500">2</td>
+<td class="px-4 py-3">川ILL5678</td>
+<td class="px-4 py-3">ZJ-102</td>
+<td class="px-4 py-3">LZ0BEJD31T1000647</td>
+<td class="px-4 py-3">餐厨式垃圾车</td>
+<td class="px-4 py-3">23时52分</td>
+<td class="px-4 py-3">7时45分</td>
+<td class="px-4 py-3">4时58分</td>
+<td class="px-4 py-3 text-blue-600">80.2%</td>
+<td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">2时01分</a></td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3 text-slate-500">3</td>
+<td class="px-4 py-3">华1006548</td>
+<td class="px-4 py-3">SC-205</td>
+<td class="px-4 py-3">LZ0BEPD51T1006548</td>
+<td class="px-4 py-3">洗扫车</td>
+<td class="px-4 py-3">23时45分</td>
+<td class="px-4 py-3">9时10分</td>
+<td class="px-4 py-3">6时33分</td>
+<td class="px-4 py-3 text-blue-600">91.3%</td>
+<td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">0时47分</a></td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3 text-slate-500">4</td>
+<td class="px-4 py-3">华1006541</td>
+<td class="px-4 py-3">SC-206</td>
+<td class="px-4 py-3">LZ0BEPD4XT1006541</td>
+<td class="px-4 py-3">洗扫车</td>
+<td class="px-4 py-3">23时40分</td>
+<td class="px-4 py-3">8时05分</td>
+<td class="px-4 py-3">5时44分</td>
+<td class="px-4 py-3 text-blue-600">84.7%</td>
+<td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">1时52分</a></td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3 text-slate-500">5</td>
+<td class="px-4 py-3">华1006549</td>
+<td class="px-4 py-3">SC-207</td>
+<td class="px-4 py-3">LZ0BEPD52T1006549</td>
+<td class="px-4 py-3">压缩式垃圾车</td>
+<td class="px-4 py-3">23时36分</td>
+<td class="px-4 py-3">7时20分</td>
+<td class="px-4 py-3">4时36分</td>
+<td class="px-4 py-3 text-blue-600">78.9%</td>
+<td class="px-4 py-3"><a class="stay-link" onclick="openStayModal()">2时18分</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 分页 -->
+<div class="px-4 py-3 border-t flex items-center justify-between text-xs text-slate-500">
+<div class="flex items-center space-x-4">
+<span>共 26 条记录</span>
+<div class="flex items-center space-x-2">
+<span>每页显示</span>
+<select class="border rounded px-1 h-6 outline-none focus:border-blue-500">
+<option>10</option>
+<option>20</option>
+<option>50</option>
+</select>
+</div>
+</div>
+<div class="flex space-x-1">
+<button class="w-7 h-7 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50"><iconify-icon icon="mdi:chevron-left"></iconify-icon></button>
+<button class="w-7 h-7 border border-blue-600 bg-blue-600 text-white rounded flex items-center justify-center font-bold">1</button>
+<button class="w-7 h-7 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50">2</button>
+<button class="w-7 h-7 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50">3</button>
+<button class="w-7 h-7 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50"><iconify-icon icon="mdi:chevron-right"></iconify-icon></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- 停留明细弹窗 -->
+<div class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50" id="stayModal">
+<div class="bg-white rounded-lg shadow-xl w-[860px] max-w-[90vw] max-h-[85vh] flex flex-col overflow-hidden">
+<div class="flex items-center justify-between px-6 h-14 bg-blue-600 shrink-0">
+<span class="text-white font-medium">停留明细 - 川AA9876</span>
+<button class="text-white/80 hover:text-white transition-colors" onclick="closeStayModal()">
+<iconify-icon class="text-xl" icon="mdi:close"></iconify-icon>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 custom-scrollbar">
+<!-- 弹窗查询条件 -->
+<div class="bg-slate-50 rounded p-4 mb-4 border border-blue-100">
+<div class="flex items-end space-x-4">
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">开始时间</label>
+<input class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="datetime-local" value="2026-05-11T08:00"/>
+</div>
+<span class="text-slate-400 pb-2">~</span>
+<div class="flex flex-col space-y-1">
+<label class="text-sm text-slate-600">结束时间</label>
+<input class="h-9 border border-slate-200 rounded px-2 text-sm outline-none focus:border-blue-500 transition-colors" type="datetime-local" value="2026-05-11T20:00"/>
+</div>
+<div class="flex items-center space-x-2 ml-auto">
+<button class="bg-blue-600 text-white px-6 h-9 rounded text-sm hover:bg-blue-700 transition-colors">查询</button>
+<button class="bg-white border border-slate-200 text-slate-600 px-6 h-9 rounded text-sm hover:bg-slate-50 transition-colors">重置</button>
+<button class="bg-white border border-slate-200 text-slate-600 px-4 h-9 rounded text-sm flex items-center space-x-1 hover:bg-slate-50 transition-colors">
+<iconify-icon icon="mdi:file-export-outline"></iconify-icon>
+<span>批量导出</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 弹窗数据列表 -->
+<div class="bg-white rounded border border-slate-200 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm whitespace-nowrap">
+<thead class="bg-blue-50 text-blue-900 border-b">
+<tr>
+<th class="px-4 py-3 font-medium">所属单位</th>
+<th class="px-4 py-3 font-medium">停留点</th>
+<th class="px-4 py-3 font-medium">停留时间段</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3">成都北城华沃顺通生态环境科技有限公司</td>
+<td class="px-4 py-3">高新区垃圾中转站</td>
+<td class="px-4 py-3">2026-05-11 08:32 ~ 08:47</td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3">成都北城华沃顺通生态环境科技有限公司</td>
+<td class="px-4 py-3">武侯区锦绣路收运点</td>
+<td class="px-4 py-3">2026-05-11 10:05 ~ 10:26</td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3">成都北城华沃顺通生态环境科技有限公司</td>
+<td class="px-4 py-3">青羊区文殊院门口</td>
+<td class="px-4 py-3">2026-05-11 13:18 ~ 13:40</td>
+</tr>
+<tr class="hover:bg-blue-50/60">
+<td class="px-4 py-3">成都北城华沃顺通生态环境科技有限公司</td>
+<td class="px-4 py-3">金牛区金府路中转站</td>
+<td class="px-4 py-3">2026-05-11 15:02 ~ 15:31</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- 弹窗分页 -->
+<div class="px-4 py-3 border-t flex items-center justify-between text-xs text-slate-500">
+<span>共 4 条记录</span>
+<div class="flex space-x-1">
+<button class="w-7 h-7 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50"><iconify-icon icon="mdi:chevron-left"></iconify-icon></button>
+<button class="w-7 h-7 border border-blue-600 bg-blue-600 text-white rounded flex items-center justify-center font-bold">1</button>
+<button class="w-7 h-7 border border-slate-200 rounded flex items-center justify-center bg-white hover:bg-slate-50"><iconify-icon icon="mdi:chevron-right"></iconify-icon></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // 导航菜单折叠逻辑
+        document.querySelectorAll('.nav-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const subMenu = header.nextElementSibling;
+                const arrow = header.querySelector('iconify-icon[icon="mdi:chevron-down"]');
+                if (subMenu) {
+                    if (subMenu.classList.contains('hidden')) {
+                        subMenu.classList.remove('hidden');
+                        arrow.classList.add('rotate-180');
+                    } else {
+                        subMenu.classList.add('hidden');
+                        arrow.classList.remove('rotate-180');
+                    }
+                }
+            });
+        });
+
+        // 二级菜单折叠逻辑
+        document.querySelectorAll('.sub-nav-header').forEach(header => {
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const subMenu = header.nextElementSibling;
+                const arrow = header.querySelector('iconify-icon[icon="mdi:chevron-down"]');
+                if (subMenu) {
+                    if (subMenu.classList.contains('hidden')) {
+                        subMenu.classList.remove('hidden');
+                        arrow.classList.add('rotate-180');
+                    } else {
+                        subMenu.classList.add('hidden');
+                        arrow.classList.remove('rotate-180');
+                    }
+                }
+            });
+        });
+
+        // 停留明细弹窗
+        function openStayModal() {
+            const modal = document.getElementById('stayModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        function closeStayModal() {
+            const modal = document.getElementById('stayModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        document.getElementById('stayModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeStayModal();
+        });
+    </script>
+</body>
+</html>
